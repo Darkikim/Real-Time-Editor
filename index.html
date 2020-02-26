@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Real Time Editor By Maxime GOETHALS</title>
+    <script>
+        function refresh()
+        {
+            //Obtenir le contenu de nos textareas
+            let cssContent = document.getElementById('css-textarea').value;
+            let jsContent = document.getElementById('js-textarea').value;
+            let editorContent = document.getElementById('html-textarea').value;
+            //Obtenir un focus sur la 'page' viewer
+            let iframeContent = document.getElementById('viewer').contentWindow.document;
+            //Création du document html
+            let contenu = '<\!DOCTYPE html><\html>'+'<\head>'+'<\style>';
+            contenu += cssContent;
+            contenu += '<\/style><\/head><\script>';
+            contenu += jsContent;
+            contenu += '<\/script> <\/head> <body>';
+            contenu += editorContent;
+            contenu += '<\/body><\/html>';
+
+            //Ouvrir l'iframe comme un type texte html et en remplacement de l'existant
+            iframeContent.open('text/html', 'replace');
+            //Ecrire notre contenu
+            iframeContent.write(contenu);
+            //Fermer le remplacement
+            iframeContent.close();
+        }
+        function onKey()
+        {
+            if(document.getElementById("realTime").checked)
+            {
+                refresh();
+            }
+        }
+    </script>
+    <style>
+        *{padding: 0;margin: 0;border: 0;}
+
+        html, body{height: 100%;width: 100%;}
+
+        body
+        {
+            display: flex;
+            flex-direction: column;
+            background: #369;
+        }
+        header
+        {
+            display: inline-flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 3%;
+            width: 100%;
+        }
+        #parameter
+        {
+            flex-direction: row;
+        }
+        #btnRefresh
+        {
+            margin: 1px;
+            background-color: #FFF;
+            padding: 3px 5px;
+        }
+        main
+        {
+            display: inline-flex;
+            flex-direction: column;
+            height: 90%;
+            width: 100%;
+            justify-content: space-between;
+        }
+        #editor
+        {
+            display: inline-flex;
+            flex-direction: row;
+            width: auto;
+            height: 25%;
+        }
+        #html-textarea, #css-textarea,#js-textarea
+        {
+            display: inline-flex;
+            flex-direction: row;
+            height: 100%;
+            width: 100%;
+            border: 1px solid #6C99D0;
+        }
+        #viewer
+        {
+            background: white;
+            border: 1px solid #6C99D0;
+            width: auto;
+            height: 70%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h2>Real Time Editor</h2>
+        <section id='parameter'>
+            <input type="checkbox" name="realTime" id="realTime" checked>
+            <label for="realTime">Display in Real Time</label>
+            <input type="button" onclick="refresh()" value="RUN" id="btnRefresh">
+        </section>
+
+    </header>
+    <main>
+        <section id='editor'>
+            <textarea id='html-textarea' onkeyup='onKey()' placeholder='HTML Code Here...'></textarea>
+            <textarea id='css-textarea' onkeyup='onKey()' placeholder='CSS Code Here...'></textarea>
+            <textarea id='js-textarea' onkeyup='onKey()' placeholder='JavaScript Code Here...'></textarea>          
+        </section>
+        <iframe id="viewer"></iframe>
+    </main>
+</body>
+</html>
